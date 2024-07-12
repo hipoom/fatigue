@@ -1,5 +1,6 @@
 package com.hipoom.calendar;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +32,39 @@ class TimeInfoTest {
 
     @Test
     public void test() {
+        TimeInfo.isSupportJava8Api = true;
+        testOrigin();
+        test19700102();
+        test19700104();
+        test19700104100000000();
+        test19700110100000000();
+        test19700210100000000();
+        test20240525100000000();
+        test20240526000000000();
+    }
+
+    @Test
+    public void testWithoutJava8Api() {
+        // 用于计算周数
+        final LocalDate origin = LocalDate.of(1970, 1, 1);
+        final LocalDate now = LocalDate.of(1970, 1, 1);
+
+        // 累计天数
+        long dayIndex = ChronoUnit.DAYS.between(origin, now);
+        System.out.println("dayIndex: " + dayIndex);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = sdf.parse("1970-01-01");
+            long timestamp = date.getTime();
+            long dayIndex2 = timestamp / 1000 / 60 / 60 / 24;
+            System.out.println("dayIndex2: " + dayIndex2);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        TimeInfo.isSupportJava8Api = false;
         testOrigin();
         test19700102();
         test19700104();
