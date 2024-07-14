@@ -70,18 +70,17 @@ public class DataStore {
     public synchronized static void markTriggerOnce(String business, long timestamp, int daysNeedRemove) {
         BusinessVO vo = loadOrInitial(business);
         vo.records.add(new Record(timestamp));
-        removeRecordBefore(vo, daysNeedRemove);
+        removeRecordBefore(vo, timestamp, daysNeedRemove);
         File file = Catalogue.getBusinessFile(workspace.getAbsolutePath(), business);
         Files.writeText(file, new Gson().toJson(vo), DstFileExistPolicy.Overwrite);
     }
 
     /**
-     * 清理 vo 中的 records, 移除 days 前的记录。
+     * 清理 vo 中的 records, 移除相对于 timestamp 时刻, days 天前的记录。
      */
-    public synchronized static void removeRecordBefore(BusinessVO vo, int days) {
-        long now = System.currentTimeMillis();
+    public synchronized static void removeRecordBefore(BusinessVO vo, long timestamp, int days) {
         long gap = days * 24 * 60 * 60 * 1000L;
-        long temp = now - gap;
+        long temp = timestamp - gap;
         List<Record> records = new ArrayList<>(vo.records);
         List<Record> needRemoveRecords = new LinkedList<>();
         for(Record record : records) {
