@@ -77,6 +77,10 @@ javadoc {
     }
 }
 
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 publishing {
     // 定义目标仓库
     repositories {

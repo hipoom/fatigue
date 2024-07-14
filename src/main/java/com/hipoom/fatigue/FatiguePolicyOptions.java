@@ -49,6 +49,9 @@ public abstract class FatiguePolicyOptions {
     /* Protect Methods                                         */
     /* ======================================================= */
 
+    /**
+     * @return 不会是 null。
+     */
     protected BusinessVO loadVO(String business) {
         return DataStore.loadOrInitial(business);
     }
