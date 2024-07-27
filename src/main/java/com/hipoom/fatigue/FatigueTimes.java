@@ -3,6 +3,7 @@ package com.hipoom.fatigue;
 import com.hipoom.fatigue.policy.DaysPolicy;
 import com.hipoom.fatigue.policy.HoursPolicy;
 import com.hipoom.fatigue.policy.MonthPolicy;
+import com.hipoom.fatigue.policy.ProcessPolicy;
 import com.hipoom.fatigue.policy.TotalPolicy;
 import com.hipoom.fatigue.policy.WeekPolicy;
 
@@ -85,12 +86,20 @@ public class FatigueTimes {
     }
 
     /**
-     * 累计总共触发 max 及其以内。
+     * 累计总共触发 this.times 次及其以内。
      *
      * @return nonnull.
      */
-    public FatiguePolicyOptions inTotal(int max) {
+    public FatiguePolicyOptions inTotal() {
         return new TotalPolicy(this.times);
+    }
+
+    /**
+     * 本次进程，累计总共触发 this.times 次及其以内。
+     * @return nonnull.
+     */
+    public FatiguePolicyOptions inProcess() {
+        return new ProcessPolicy(this.times);
     }
 
 }
